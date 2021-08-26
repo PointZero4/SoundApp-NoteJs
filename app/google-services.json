@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "943325553302",
+    "project_id": "soundapp-95c21",
+    "storage_bucket": "soundapp-95c21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943325553302:android:7ad1200a2e83e807e358b7",
+        "android_client_info": {
+          "package_name": "com.example.soundapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943325553302-tstsavhdulelfh7td48oe2a5q6vbdncs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCI6L8l6fXIMebix-Q0MSRVFG1BA19sTpo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943325553302-tstsavhdulelfh7td48oe2a5q6vbdncs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

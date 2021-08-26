@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">SoundApp</string>
+    <string name="logout">Logout</string>
+    <string name="soundapp">SoundApp</string>
+    <string name="control_sound_pollution">Control Sound Pollution!</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="register">Register</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="textview">TextView</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="instruction">
+        <b>How to use the App:</b>
+        \n
+        1. Make sure there is an internet connection.\n
+        2. Once you connect the sound detector and the sound controller devices, the app will be connected to them automatically.\n
+        3. Measure the sound level with the sound detector device to get the sound level in the app.\n
+        4. If the sound level is greater than 55dB, the sound level will be reduced to 55dB automatically.\n
+        <!--        5. Smile, you don't have to do anything. Just connect your devices!.-->
+
+
+
+    </string>
+    <!--    <string name="email_address">Email Address</string>-->
+</resources>
