@@ -72,10 +72,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         });
 
 
-        TextView forgotPassword = (TextView) findViewById(R.id.forgotpassword);
-        forgotPassword.setOnClickListener(this);
-        forgotPassword.setPaintFlags(forgotPassword.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-
     }
 
 
@@ -92,10 +88,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.signIn:
                 userLogin();
                 break;
-            //redirect to ForgotPassword page
-            case R.id.forgotpassword:
-                startActivity(new Intent(this, ForgotPassword.class));
-                break;
+
 
 
         }
