@@ -69,7 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
             String passedSoundLevel = intent.getStringExtra("sound");
             soundLevel.setText(passedSoundLevel);
             String passedId = intent.getStringExtra("deviceId");
-            deviceId.setText("DeviceId:" + passedId);
+            deviceId.setText("DeviceId:\n" + passedId);
 
             float number = Float.parseFloat(passedSoundLevel);
 
@@ -111,22 +111,30 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+
+
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+//                            doSomeOperations();
+                        bluetooth.connect(data);
+                    }
+                });
+
+
+        
         connect.setOnClickListener(v -> {
             if (bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
                 bluetooth.disconnect();
             } else {
                 Intent intent1 = new Intent(getApplicationContext(), DeviceList.class);
-                startActivityForResult(intent1, BluetoothState.REQUEST_CONNECT_DEVICE);
-//                ActivityResultLauncher<Intent> resultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-//                    @Override
-//                    public void onActivityResult(ActivityResult result) {
-//                        if(result.getResultCode() == Activity.RESULT_OK){
-//                            Intent intent1 = new Intent(getApplicationContext(), DeviceList.class);
-//                           // startActivity(intent1,BluetoothState.REQUEST_CONNECT_DEVICE);
-//                        }
-//                    }
-//
-//                });
+                someActivityResultLauncher.launch(intent1);
+
+
             }
         });
     }
