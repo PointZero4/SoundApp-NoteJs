@@ -49,6 +49,6 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.google.android.material:material:1.5.0-alpha02'
-//    implementation 'androidx.appcompat:appcompat:1.4.0-alpha03'
     implementation 'com.akexorcist:bluetoothspp:1.0.0'
+    implementation 'com.github.nkzawa:socket.io-client:0.6.0'
 }

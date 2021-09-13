@@ -26,8 +26,16 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.IO;
+import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.URISyntaxException;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
@@ -36,13 +44,58 @@ import app.akexorcist.bluetotohspp.library.DeviceList;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    TextView username, soundLevel, email, deviceId;
+    TextView username, msoundLevel, email, deviceId;
 
 
-    final String data = "1";
-    final String data1 = "0";
+    final String data1 = "1";
+    final String data2 = "0";
     BluetoothSPP bluetooth;
     Button connect;
+
+    // Socket implementation
+    private Socket mSocket;
+
+    {
+        try {
+            String serverUrl = "http://smaster-backend.herokuapp.com";
+            mSocket = IO.socket(serverUrl);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private final Emitter.Listener onNewMessage = args -> runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+            try {
+                JSONObject data = (JSONObject) args[0];
+
+                Intent intent = getIntent();
+                if (intent.getExtras() != null) {
+
+                    String soundLevel;
+                    soundLevel = data.getString("soundLevel");
+                    String sound = intent.getStringExtra("soundLevel");
+                    msoundLevel.setText(soundLevel);
+                    System.out.println(soundLevel);
+
+
+                    float number = Float.parseFloat(sound);
+                    if (number == 0.0) {
+                        Toast.makeText(ProfileActivity.this, "Please connect your sound detector device", Toast.LENGTH_LONG).show();
+                    } else if (number > 55.0) {
+                        bluetooth.send(data1, true);
+                    } else {
+                        bluetooth.send(data2, true);
+                    }
+
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    });
 
 
     @SuppressLint("SetTextI18n")
@@ -51,11 +104,14 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         username = findViewById(R.id.name);
-        soundLevel = findViewById(R.id.textHome);
+        msoundLevel = findViewById(R.id.textHome);
         email = findViewById(R.id.mail);
         deviceId = findViewById(R.id.id);
         connect = (Button) findViewById(R.id.connect);
         bluetooth = new BluetoothSPP(this);
+
+        mSocket.connect();
+        mSocket.on("receive_data", onNewMessage);
 
         // Getting the User details
         Intent intent = getIntent();
@@ -66,25 +122,14 @@ public class ProfileActivity extends AppCompatActivity {
 
             String passedEmail = intent.getStringExtra("email");
             email.setText("Email:\n" + passedEmail);
-            String passedSoundLevel = intent.getStringExtra("sound");
-            soundLevel.setText(passedSoundLevel);
             String passedId = intent.getStringExtra("deviceId");
             deviceId.setText("DeviceId:\n" + passedId);
 
-            float number = Float.parseFloat(passedSoundLevel);
-
-            if (number == 0.0) {
-                Toast.makeText(ProfileActivity.this, "Please connect your sound detector device", Toast.LENGTH_LONG).show();
-            } else if (number > 55.0) {
-                bluetooth.send(data, true);
-            } else {
-                bluetooth.send(data1, true);
-            }
 
         }
 
         //Sound Level Animation
-        soundLevel.setOnClickListener(v -> soundLevel.animate().rotationY(360f).start());
+        msoundLevel.setOnClickListener(v -> msoundLevel.animate().rotationY(360f).start());
 
 
         //Bluetooth Connection
@@ -126,7 +171,6 @@ public class ProfileActivity extends AppCompatActivity {
                 });
 
 
-        
         connect.setOnClickListener(v -> {
             if (bluetooth.getServiceState() == BluetoothState.STATE_CONNECTED) {
                 bluetooth.disconnect();
@@ -158,6 +202,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         super.onDestroy();
         bluetooth.stopService();
+
+        mSocket.disconnect();
+        mSocket.off("receive_data", onNewMessage);
     }
 
 

@@ -135,7 +135,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                             assert loginResponse != null;
                             Intent iDetail = new Intent(MainActivity.this,ProfileActivity.class);
                             iDetail.putExtra("name",loginResponse.getUser().getName());
-                            iDetail.putExtra("sound",loginResponse.getUser().getSoundLevel());
+                            iDetail.putExtra("soundLevel",loginResponse.getUser().getSoundLevel());
                             iDetail.putExtra("email",loginResponse.getUser().getEmail());
                             iDetail.putExtra("deviceId",loginResponse.getUser().getDeviceId());
 
